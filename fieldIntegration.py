@@ -24,12 +24,29 @@ def genOdeFunction(field):
     
     return func
 
+def genOdeFunction2D(field):
+    
+    def func(t,y):
+        #fs, [um, eV]
+        x = y[0] # um
+        z = y[1] # um
+        px = y[2] # ev/c
+        pz = y[3] # ev/c
+        E = np.sqrt(m0**2 + px**2 + pz**2) #eV
+        dx = px/E*const.c*1e-15*1e6 #um/fs
+        dz = pz/E*const.c*1e-15*1e6 #um/fs
+        dpx, dpz = np.real(field(t, z)*(1e9*1e-15)*const.c)
+        
+        return [dx, dz, dpx, dpz]
+    
+    return func
+
 def trackParticle(field, t0, y0, tEnd):
     
     #t0, y0 units: fs, [um, eV]
     r = ode(genOdeFunction(field))
     r.set_initial_value(y0, t0)
-    dt = 1. #fs
+    dt = 0.05 #fs
     trace = []
     while r.successful() and r.t < tEnd:
         r.integrate(r.t+dt)

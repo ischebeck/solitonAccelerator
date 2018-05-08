@@ -13,6 +13,9 @@ solT = 20. #fs
 solArea = 1.5**2 #um2
 fieldFactor = 0.005 #fraction of soliton field in electron channel
 
+wigglerLambda = 1.5 #um 
+wigglerW0 = 2*np.pi*const.c/wigglerLambda*(1e6*1e-15) #1e15 rad/s
+wigglerPeak = 1000.
 
 def peakField():
     #in GV/m
@@ -24,6 +27,7 @@ def peakField():
 
 solPeakField = peakField()
 
+
 def solitonField(t, z):
     #in GV/m
     xi = 2*np.pi/solLambdaN*z - solW0*t
@@ -34,6 +38,13 @@ def solitonField(t, z):
 
 def solitonEnvelope(t, z):
     return np.abs(solitonField(t,z))
+
+def wigglerField(t, z):
+    #in GV/m
+    xi = wigglerW0*t
+    amp = np.exp(1j*(xi))*wigglerPeak
+    #return np.array([1,0])
+    return np.array([amp,0])
 
 """
 z= np.linspace(-25, 25, 5000)
