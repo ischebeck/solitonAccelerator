@@ -11,7 +11,7 @@ import scipy.constants as const
 m0 = const.electron_mass*const.c**2/const.electron_volt #eV
 
 def genOdeFunction(field):
-    
+    # field(t, z) electric field at position z, at time t
     def func(t,y):
         #fs, [um, eV]
         z = y[0] # um
@@ -25,7 +25,7 @@ def genOdeFunction(field):
     return func
 
 def genOdeFunction2D(field):
-    
+    # field(t, z) electric field at position z, at time t
     def func(t,y):
         #fs, [um, eV]
         x = y[0] # um
@@ -42,8 +42,8 @@ def genOdeFunction2D(field):
     return func
 
 def trackParticle(field, t0, y0, tEnd):
-    
-    #t0, y0 units: fs, [um, eV]
+    # field(t, z) electric field at position z, at time t
+    # t0, y0 units: fs, [um, eV]
     r = ode(genOdeFunction(field))
     r.set_initial_value(y0, t0)
     dt = 0.05 #fs
